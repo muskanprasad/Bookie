@@ -2,13 +2,14 @@ const CACHE_NAME = 'bookie-v1';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
-  '/src/main.jsx',
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
+      return cache.addAll(ASSETS_TO_CACHE).catch(() => {
+        // Ignore failures for dynamic assets
+      });
     })
   );
   self.skipWaiting();
@@ -55,7 +56,7 @@ self.addEventListener('fetch', (event) => {
 
         return response;
       }).catch(() => {
-        // If offline and not in cache, fail gracefully
+        // Offline fallback
         return new Response('Offline - unable to load resource', { status: 503 });
       });
     })

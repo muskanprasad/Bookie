@@ -9,6 +9,7 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 
+// Register Service Worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(
     (registration) => {
